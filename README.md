@@ -190,7 +190,7 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ## 🙏 Agradecimientos
 
-- **Desarrollado por:** opencode (Asistente AI)
+- **Desarrollado por:** Agdala 2026
 - **Inspirado en:** Necesidad de seguridad local proactiva
 - **Peso total:** ~104KB (ultra liviano)
 
