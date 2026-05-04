@@ -1,0 +1,38 @@
+# Logs
+*.log
+logs/
+
+# Reports (generated)
+reports/
+*.json
+
+# Quarantine (generated)
+quarantine/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# User docs (generated)
+README_SECURITY.md
+documentos/
+
+# State files (generated)
+state.json
+integrity_db.json
+startup.log

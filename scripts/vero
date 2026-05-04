@@ -1,0 +1,207 @@
+#!/usr/bin/env python3
+#!/usr/bin/env python3
+import sys
+import os
+import json
+import subprocess
+from pathlib import Path
+
+SECURITY_AI_PATH = "/home/agdala/documentos/security_ai"
+README_PATH = "/home/agdala/documentos/README_SECURITY.md"
+
+def show_help():
+    print("""
+🛡️ VERO - Micro IA de Seguridad
+
+Comandos disponibles:
+  vero                           - Muestra el estado actual del sistema
+  vero reporte                   - Genera y muestra reporte completo
+  vero reporte rapido             - Escaneo rápido (solo red y procesos)
+  vero actividad sospechosa       - Busca amenazas recientes
+  vero estas en linea             - Verifica si VERO está activo
+  vero ips bloqueadas             - Muestra IPs bloqueadas
+  vero archivos en cuarentena     - Lista archivos en cuarentena
+  vero revisa este archivo [ruta] - Escanea un archivo específico
+  vero logs hoy                   - Muestra logs de hoy
+  vero ayuda                      - Muestra esta ayuda
+
+Ejemplos:
+  vero
+  vero revisa este archivo /home/agdala/Descargas/archivo.zip
+  vero revisa este archivo /home/agdala/app.apk
+""")
+
+def run_security_ai(args):
+    cmd = ["python3", f"{SECURITY_AI_PATH}/security_ai.py"] + args
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        if result.returncode == 0:
+            return result.stdout
+        else:
+            return f"Error: {result.stderr}"
+    except Exception as e:
+        return f"Error ejecutando VERO: {e}"
+
+def show_status():
+    print("¡Hola! Soy VERO, tu Micro IA de Seguridad 🛡️")
+    print("")
+    
+    if os.path.exists(README_PATH):
+        with open(README_PATH) as f:
+            content = f.read()
+            # Extraer solo la información clave
+            lines = content.split('\n')
+            for line in lines:
+                if 'Estado del Sistema' in line or 'SECURE' in line or 'COMPROMISED' in line:
+                    print(line)
+                    break
+            
+            # Buscar resumen
+            in_resumen = False
+            for line in lines:
+                if '### Resumen' in line:
+                    in_resumen = True
+                    continue
+                if in_resumen:
+                    if line.strip().startswith('###') or line.strip().startswith('---'):
+                        break
+                    if line.strip():
+                        print(line)
+            
+            print("")
+            print("Usa 'vero ayuda' para ver todos los comandos")
+            print("Usa 'vero reporte' para ver el reporte completo")
+    else:
+        print("Generando primer reporte...")
+        print(run_security_ai(["--quick"]))
+
+def check_online():
+    try:
+        result = subprocess.run(["systemctl", "is-active", "security_ai_service.service"], 
+                              capture_output=True, text=True)
+        if "active" in result.stdout:
+            print("✅ VERO está ACTIVO (servicio systemd corriendo)")
+        else:
+            print("⚠️ VERO no está activo como servicio, pero puede ejecutar escaneos manuales")
+        
+        cron = subprocess.run(["crontab", "-l"], capture_output=True, text=True)
+        if "security_ai" in cron.stdout or "security" in cron.stdout:
+            print("✅ Reportes automáticos configurados (cron jobs activos)")
+        else:
+            print("⚠️ Reportes automáticos NO configurados")
+    except:
+        print("❓ No se pudo verificar el estado")
+
+def scan_file(filepath):
+    if not os.path.exists(filepath):
+        print(f"❌ El archivo {filepath} no existe")
+        return
+    
+    print(f"🔍 Escaneando: {filepath}")
+    
+    ext = filepath.lower()
+    if any(ext.endswith(e) for e in ['.zip', '.rar', '.7z', '.tar', '.tar.gz', '.tgz', '.tar.bz2']):
+        print("📦 Archivo comprimido detectado - Escaneando contenido interno...")
+    elif ext.endswith('.apk'):
+        print("📱 APK detectada - Analizando código interno...")
+    
+    security_ai = os.path.join(SECURITY_AI_PATH, "security_ai.py")
+    
+    import sys
+    sys.path.insert(0, SECURITY_AI_PATH)
+    try:
+        from security_ai import SecurityAI
+        ai = SecurityAI()
+        
+        if any(ext.endswith(e) for e in ['.zip', '.rar', '.7z', '.tar', '.tar.gz', '.tgz', '.tar.bz2']):
+            threats = ai.scan_compressed_file(filepath)
+        elif ext.endswith('.apk'):
+            threats = ai.scan_apk_file(filepath)
+        else:
+            threat = ai.scan_file_for_viruses(filepath)
+            threats = [threat] if threat else []
+        
+        if threats:
+            print(f"⚠️ AMENAZA DETECTADA:")
+            for t in threats:
+                print(f"  - Tipo: {t.get('type', 'desconocido')}")
+                print(f"    Severidad: {t.get('severity', 'N/A')}")
+                if 'file' in t:
+                    print(f"    Archivo: {t['file']}")
+            print(f"\n🗑️ Eliminando archivo: {filepath}")
+            try:
+                os.remove(filepath)
+                print("✅ Archivo eliminado")
+            except Exception as e:
+                print(f"❌ Error eliminando: {e}")
+        else:
+            print("✅ Archivo seguro - No se detectaron amenazas")
+    except Exception as e:
+        print(f"❌ Error escaneando: {e}")
+
+def main():
+    if len(sys.argv) == 1:
+        show_status()
+        return
+    
+    command = ' '.join(sys.argv[1:]).lower()
+    
+    if 'ayuda' in command or 'help' in command:
+        show_help()
+    elif 'reporte rapido' in command:
+        print(run_security_ai(["--quick"]))
+    elif 'reporte' in command:
+        print(run_security_ai(["--report"]))
+    elif 'actividad sospechosa' in command or 'amenazas' in command:
+        if os.path.exists(README_PATH):
+            with open(README_PATH) as f:
+                content = f.read()
+                if "COMPROMISED" in content or "threats_detected" in content:
+                    print("⚠️ ACTIVIDAD SOSPECHOSA DETECTADA:")
+                    print(content)
+                else:
+                    print("✅ No se detectó actividad sospechosa reciente")
+    elif 'estas en linea' in command or 'activo' in command:
+        check_online()
+    elif 'ips bloqueadas' in command:
+        state_file = os.path.join(SECURITY_AI_PATH, "state.json")
+        if os.path.exists(state_file):
+            with open(state_file) as f:
+                state = json.load(f)
+                ips = state.get('blocked_ips', [])
+                if ips:
+                    print(f"🚫 IPs bloqueadas ({len(ips)}):")
+                    for ip in ips:
+                        print(f"  - {ip}")
+                else:
+                    print("✅ No hay IPs bloqueadas")
+    elif 'archivos en cuarentena' in command:
+        quarantine_dir = os.path.join(SECURITY_AI_PATH, "quarantine")
+        if os.path.exists(quarantine_dir):
+            files = os.listdir(quarantine_dir)
+            if files:
+                print(f"🔒 Archivos en cuarentena ({len(files)}):")
+                for f in files:
+                    print(f"  - {f}")
+            else:
+                print("✅ Cuarentena vacía")
+    elif 'revisa este archivo' in command or 'scan' in command:
+        for i, arg in enumerate(sys.argv):
+            if arg == 'archivo' and i+1 < len(sys.argv):
+                filepath = sys.argv[i+1]
+                scan_file(filepath)
+                return
+        print("❌ Especifica la ruta del archivo: vero revisa este archivo /ruta/al/archivo")
+    elif 'logs hoy' in command:
+        log_file = os.path.join(SECURITY_AI_PATH, "logs", f"security_{subprocess.check_output(['date', '+%Y%m%d']).decode().strip()}.log")
+        if os.path.exists(log_file):
+            with open(log_file) as f:
+                print(f.read())
+        else:
+            print("No hay logs para hoy")
+    else:
+        print(f"Comando no reconocido: {' '.join(sys.argv[1:])}")
+        print("Usa 'vero ayuda' para ver comandos disponibles")
+
+if __name__ == "__main__":
+    main()
