@@ -2,7 +2,7 @@
 
 **Sistema de defensa local proactiva contra virus, ataques, spam y amenazas en archivos comprimidos/APKs.**
 
-[![GitHub](https://img.shields.io/badge/GitHub-VERO-black?style=flat&logo=github)](https://github.com/usuario/vero)
+[![GitHub](https://img.shields.io/badge/GitHub-VERO-black?style=flat&logo=github)](https://github.com/agdalasv/vero)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat&logo=python)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
 
@@ -12,7 +12,7 @@
 
 ```bash
 # Clonar repositorio
-git clone https://github.com/usuario/vero.git
+git clone https://github.com/agdalasv/vero.git
 cd vero
 
 # Ejecutar instalador
@@ -177,7 +177,7 @@ vero reporte rapido
 
 ## 📞 Soporte
 
-- **Reportar problemas:** [GitHub Issues](https://github.com/usuario/vero/issues)
+- **Reportar problemas:** [GitHub Issues](https://github.com/agdalasv/vero/issues)
 - **Preguntas:** Usa `vero ayuda` o consulta la documentación
 
 ---
@@ -190,12 +190,50 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ## 🙏 Agradecimientos
 
-- **Desarrollado por:** Agdala 2026
+- **Desarrollado por:** Agdala - 2026
 - **Inspirado en:** Necesidad de seguridad local proactiva
 - **Peso total:** ~104KB (ultra liviano)
 
 ---
 
+## ☕ Invita un Café
+
+Si te gusta VERO y quieres apoyar el desarrollo, puedes hacer una donación:
+
+**Wallet BTC:** `3L8f3v6BWwL7KBcb8AMZQ2bpE3ACne2EUf`
+
+¡Gracias por tu apoyo! 🎉
+
+---
+
+## 🐛 Reportar Bugs
+
+¿Encontraste un bug? Escríbenos:
+
+**Email:** agdala.sv@gmail.com
+
+O abre un issue en GitHub:
+https://github.com/agdalasv/vero/issues
+
+---
+
+## 📜 Licencia
+
+**MIT License - 2026 Agdala**
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+---
+
 *Última actualización: 2026-05-03*
-*Versión: 1.0 - VER0*
+*Versión: 1.0 - VERO*
+*Desarrollado por: Agdala 2026*
 *Estado: ACTIVO Y PROTEGIENDO* 🛡️
