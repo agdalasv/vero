@@ -2,6 +2,11 @@
 
 **Sistema de defensa local proactiva contra virus, ataques, spam y amenazas en archivos comprimidos/APKs.**
 
+### 🐧 Compatible con Linux
+- Ubuntu, Debian, Linux Mint, Fedora, CentOS, Arch Linux
+- Requiere: Python 3.8+, systemd, iptables
+- Arquitectura: x86_64 (64-bit)
+
 [![GitHub](https://img.shields.io/badge/GitHub-VERO-black?style=flat&logo=github)](https://github.com/agdalasv/vero)
 [![Website](https://img.shields.io/badge/Web-vero.netlify.app-blue?style=flat&logo=github-pages)](https://agdalasv.github.io/vero/)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat&logo=python)](https://www.python.org/)
